@@ -48,3 +48,7 @@ let check = r > k && 5 < 6;
 let check2 = r < k || 5 < 6;
 console.log(check);
 console.log(check2);
+let t1 = 10; // number
+let t2 = "10"; // string
+let check3 = t1 === t2; // so sanh bang nhau ve mat gia tri va cung kieu du lieu voi nhau
+console.log(check3);
