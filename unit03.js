@@ -112,7 +112,8 @@ console.log(`co ${count1} so le tu 1 toi 10`);
 // 13 co phai so nguyen to hay ko ?
 // 1 ... 13:  2...12
 let myNumber = 19;
-let checkNum = true; // gia su coi la so nguyen to
+let checkNum = true; // gia su coi la so nguyen to bc h
+// n >= can bac hai cua n
 /*
 for(let i = 2; i <= myNumber - 1; i++){
     if(myNumber % i == 0){
