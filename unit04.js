@@ -4,7 +4,7 @@
 // Ham: giup cho viec tai su dung lai chuong trinh
 // co cac loai ham co ban trong JS
 // 1 - function declaration : function golbal - goi bat ky khi nao trong chuong trinh
-function sumNumber(n1, n2, n3) { // scope - block
+export function sumNumber(n1, n2, n3) { // scope - block
     // n1, n2, n3 : tham so - truyen vao ham (hieu don gian cac bien de su dung trong ham)
     let sum = n1 + n2 + n3; // tinh toan  - xu ly logic trong ham
     return sum; 
