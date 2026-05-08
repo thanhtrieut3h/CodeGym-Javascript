@@ -1,0 +1,16 @@
+{
+  "name": "jscodegym",
+  "version": "1.0.0",
+  "description": "learning JS",
+  "main": "unit01.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "JS",
+    "NodeJS"
+  ],
+  "author": "TrieuNT",
+  "license": "ISC"
+}
