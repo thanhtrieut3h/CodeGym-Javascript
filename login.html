@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>System Login</title>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+            rel="stylesheet">
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-md-6 offset-md-3">
+                    <form class="border p-4 mt-5">
+                        <div class="mb-3">
+                            <label for="exampleInputEmail1"
+                                class="form-label">Email address</label>
+                            <input type="email" class="form-control"
+                                id="exampleInputEmail1"
+                                aria-describedby="emailHelp">
+                            <div id="emailError" class="form-text"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleInputPassword1"
+                                class="form-label">Password</label>
+                            <input type="password" class="form-control"
+                                id="exampleInputPassword1">
+                            <div id="passwordError" class="form-text"></div>
+                        </div>
+                        <button type="button"
+                            class="btn btn-primary"
+                            id="btnLogin">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // code js
+            let btnLogin = document.getElementById("btnLogin");
+            btnLogin.onclick = function(){
+                let email = document.getElementById("exampleInputEmail1");
+                let password = document.getElementById("exampleInputPassword1");
+                let emailError = document.getElementById("emailError");
+                let passwordError = document.getElementById("passwordError");
+                let emailValue = email.value.trim();
+                let passwordValue = password.value.trim();
+                if(emailValue.length === 0){
+                    emailError.style.display = "block";
+                    emailError.innerHTML = "Email is required";
+                    emailError.style.color = "red";
+                    emailError.style.fontWeight = "bold";
+                    email.style.border = "thin solid red";
+                } else {
+                    emailError.style.display = "none";
+                    email.style.border = "";
+                }
+                if(passwordValue.length === 0){
+                    passwordError.style.display = "block";
+                    passwordError.innerHTML = "Password is required";
+                    passwordError.style.color = "red";
+                    passwordError.style.fontWeight = "bold";
+                    password.style.border = "thin solid red";
+                } else {
+                    passwordError.style.display = "none";
+                    password.style.border = "";
+                }
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giai phuong trinh bac hai</title>
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+            rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-6 offset-md-3">
+                <h2 class="text-center mt-3"> Giai Phuong trinh bac hai</h2>
+                <form class="p-4 mt-3 border">
+                    <div class="mb-3">
+                        <label for="hsa" class="form-label"> Nhap He So A</label>
+                        <input class="form-control" id="hsa" />
+                        <div class="form-text" id="hsaErr"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="hsb" class="form-label"> Nhap He So B</label>
+                        <input class="form-control" id="hsb" />
+                        <div class="form-text" id="hsbErr"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="hsc" class="form-label"> Nhap He So C</label>
+                        <input class="form-control" id="hsc" />
+                        <div class="form-text" id="hscErr"></div>
+                    </div>
+                    <button type="button" class="btn btn-primary" id="btnGPT"> Giai PT</button>
+                    <div class="mt-3 form-text" id="result"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        let btnGPT = document.getElementById("btnGPT");
+        btnGPT.addEventListener("click", function(){
+            let hsa = document.getElementById("hsa");
+            let hsb = document.getElementById("hsb");
+            let hsc = document.getElementById("hsc");
+            let hsaErr = document.getElementById("hsaErr");
+            let hsbErr = document.getElementById("hsbErr");
+            let hscErr = document.getElementById("hscErr");
+            let result = document.getElementById("result");
+
+            let hsaVal = hsa.value.trim(); // string
+            let hsbVal = hsb.value.trim(); // string
+            let hscVal = hsc.value.trim(); // string
+            let chkHsa, chkHsb, chkHsc = null;
+
+            let numHsa = Number(hsaVal); // ep gia tri ve so - kieu DL : number
+            // xu ly cho hsa
+            if(Number.isFinite(numHsa) && hsaVal !== ""){
+                // day la so
+                hsaErr.style.display = "none";
+                hsa.style.border = "";
+                chkHsa = true;
+            } else {
+                // nhap khong la so
+                chkHsa = false;
+                hsaErr.style.display = "block";
+                hsaErr.innerHTML = "Vui long nhap so";
+                hsaErr.style.color = "red";
+                hsa.style.border = "thin solid red";
+            }
+
+            let numHsb = Number(hsbVal); // ep gia tri ve so - kieu DL : number
+            // xu ly cho hsb
+            if(Number.isFinite(numHsb) && hsbVal !== ""){
+                // day la so
+                chkHsb = true;
+                hsbErr.style.display = "none";
+                hsb.style.border = "";
+            } else {
+                // nhap khong la so
+                chkHsb = false;
+                hsbErr.style.display = "block";
+                hsbErr.innerHTML = "Vui long nhap so";
+                hsbErr.style.color = "red";
+                hsb.style.border = "thin solid red";
+            }
+
+            let numHsc = Number(hscVal); // ep gia tri ve so - kieu DL : number
+            // xu ly cho hsb
+            if(Number.isFinite(numHsc) && hscVal !== ""){
+                // day la so
+                chkHsc = true;
+                hscErr.style.display = "none";
+                hsc.style.border = "";
+            } else {
+                // nhap khong la so
+                chkHsc = false;
+                hscErr.style.display = "block";
+                hscErr.innerHTML = "Vui long nhap so";
+                hscErr.style.color = "red";
+                hsc.style.border = "thin solid red";
+            }
+            // xu ly giai pt.
+            if(chkHsa && chkHsb && chkHsc){
+                result.style.display = "block";
+                if(numHsa === 0){
+                    // khong phai phuong trinh bac hai
+                    if(numHsb === 0 && numHsc === 0){
+                        result.innerHTML = "Phuong trinh vo so nghiem";
+                    } else if(numHsb === 0 && numHsc !== 0){
+                        result.innerHTML = "Phuong trinh vo  nghiem";
+                    } else {
+                        result.innerHTML = `PT co nghiem ${-numHsc/numHsb}`;
+                    }
+                } else {
+                    // phuong trinh bac hai
+                    let delta = (numHsb*numHsb) - (4*numHsa*numHsc);
+                    if(delta < 0){
+                        result.innerHTML = "Phuong trinh vo nghiem";
+                    } else if(delta === 0){
+                        result.innerHTML = `PT co nghiem kep x1=x2=${-numHsb/(2*numHsa)}`;
+                    } else {
+                        let x1 = (-numHsb + Math.sqrt(delta))/(2*numHsa);
+                        let x2 = (-numHsb - Math.sqrt(delta))/(2*numHsa);
+                        result.innerHTML = `PT co 2 nghiem phan biet X1 = ${x1} va X2 = ${x2}`;
+                    }
+                }
+            } else {
+                result.style.display = "none";
+            }
+        });
+    </script>
+</body>
+</html>
