@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Todo List</title>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+            rel="stylesheet">
+        <link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-md-6 offset-md-3 border mt-3 p-3">
+                    <h2 class="text-center mt-3"> Todo List</h2>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control"
+                            placeholder="Nhap ten cong viec ..."
+                            id="taskInput">
+                        <button class="btn btn-primary"
+                            id="addBtn">
+                            <i class="bi bi-clipboard-plus"></i>
+                        </button>
+                    </div>
+                    <ul class="list-group" id="taskList"></ul>
+                    <p class="form-text mt-3"> Còn lại : <span id="remainingCount">0</span></p>
+                </div>
+            </div>
+        </div>
+        <script>
+            // tim cac phan tu DOM HTML
+            let taskInput = document.getElementById("taskInput");
+            let addBtn    = document.getElementById("addBtn");
+            let taskList  = document.getElementById("taskList");
+            let countSpan = document.getElementById("remainingCount");
+            // tao mang de luu tru cong viec
+            let tasks = [
+                {name: "Hoc JS", completed: false},
+                {name: "Hoc HTML", completed: false},
+                {name: "Hoc CSS", completed: false},
+                {name: "Hoc thiet ke giao dien", completed: true}
+            ];
+            // cap nhat so luong cong viec chua hoan thanh
+            function updateRemainingCount(){
+                const remainingTask = tasks.filter(t => !t.completed); // danh sach cong viec chua hoan thanh
+                countSpan.textContent = remainingTask.length;
+            }
+            // them moi cong viec
+            function addTask(){
+                const taskName = taskInput.value.trim();
+                if(taskName === ""){
+                    alert("Vui long nhap ten cong viec");
+                    return; // dung lai khong lam cac cong viec tiep theo.
+                }
+                // them cong viec moi vao mang
+                tasks.push({
+                    name: taskName,
+                    completed: false
+                });
+                taskInput.value = ""; // xoa du lieu vua nhap tren input
+                renderTask();// hien thi lai danh sach khi co cong viec moi them vao
+            }
+            // hien thi danh sach cong viec
+            function renderTask(){
+                taskList.innerHTML = ''; // xoa het danh sach cong viec
+                tasks.forEach((task, index) => {
+                    const li = document.createElement('li');
+                    li.classList.add("list-group-item");
+                    const taskSpan = document.createElement('span');
+                    taskSpan.textContent = task.name;
+                    if(task.completed){
+                        taskSpan.classList.add("text-decoration-line-through");
+                    }
+                    // xu ly su kien - click ten cong viec, danh dau la hoan thanh
+                    taskSpan.addEventListener('click', () => {
+                        tasks[index].completed = !tasks[index].completed; // doi false => true
+                        renderTask(); // hien thi lai danh sach
+                    });
+                    // xu ly xoa cong viec
+                    const delBtn = document.createElement('button');
+                    delBtn.innerHTML = '<i class="bi bi-trash"></i>';
+                    delBtn.className = "btn btn-danger btn-sm float-end";
+                    // bat su kien xoa cong viec
+                    delBtn.addEventListener('click', (e) => {
+                        e.stopPropagation(); // khong anh huong den su kien the span(ten CV)
+                        tasks.splice(index, 1); // xoa phan tu khoi mang
+                        renderTask();
+
+                    });
+                    li.appendChild(taskSpan);
+                    li.appendChild(delBtn);
+                    taskList.appendChild(li);
+
+                }); // duyet danh sach cong viec
+                updateRemainingCount(); // cap nhat lai cong viec chua hoan thanh
+            }
+            // su kien bam button them cong viec
+            addBtn.addEventListener('click', addTask);
+            // xu ly nguoi dung go phim Enter sau khi nhap xong cong viec
+            taskInput.addEventListener('keypress', (e) => {
+                if(e.keyCode === 13 || e.key === 'Enter'){
+                    addTask();
+                }
+            });
+            renderTask();// hien thi mac dinh cac cong viec da co truoc do
+        </script>
+    </body>
+</html>
