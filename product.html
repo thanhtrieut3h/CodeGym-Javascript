@@ -63,6 +63,10 @@
                     <i class="fas fa-store me-2"></i>Danh sách sản phẩm
                 </h1>
                 <p class="lead">Dữ liệu được lấy từ API FakeStore</p>
+                <button class="btn btn-primary btn-sm"
+                        onclick="location.reload(true);"> 
+                        Lam moi du lieu
+                </button>
             </div>
 
             <!-- Hiển thị loading, lỗi hoặc nội dung -->
@@ -97,6 +101,21 @@
             `;
             try {
                 // khong co loi hay dieu gi xau xay ra
+                const response = await fetch(API_URL);
+                if(!response.ok){
+                    // khong lay duoc du lieu tu API
+                    throw new Error(`Error status : ${response.status}`);
+                }
+                const products = await response.json(); // convert ve object js
+                // kiem tra xem co san pham nao ko ?
+                if(!products || products.length === 0){
+                    // khong co san nao de hien thi
+                    renderEmptyState();
+                } else {
+                    // hien thi san pham cho nguoi dung xem
+                    renderProductions(products);
+                }
+
             } catch (error) {
                 // co loi xay ra
                 console.log("Loi goi API: ", error);
@@ -104,6 +123,71 @@
                 renderError("Co loi xay ra, vui long thu lai sau");
             }
         }
+        // viet ham de hien thi thong tin san pham
+        function renderProductions(products){
+            const container = document.getElementById("productContainer");
+            // tao template hien thi khung giao dien
+            let pdHtml = `
+                <div class="row g-4">
+            `;
+            // xu ly hien thi san pham
+            products.forEach(pd => {
+                // xu ly hien thi don vi tien te theo usd
+                const formartedPrice = new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD'
+                }).format(pd.price);
+                // xu ly hien thi mo ta ngan gon san pham
+                const shortDesc = pd.description.length > 100
+                                  ? pd.description.substring(0, 100) + '...'
+                                  : pd.description;
+                pdHtml += `
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="card h-100 shadow-sm border-0">
+                            <img src="${pd.image}"
+                                class="card-img-top product-img"
+                                alt="${pd.title}"
+                                loading="lazy"/>
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="product-title card-title">
+                                    ${pd.title}
+                                </h5>
+                                <p class="card-text text-muted small">
+                                    ${shortDesc}
+                                </p>
+                                <div class="mt-auto">
+                                    <div class="d-flex justify-content-between aligin-items-center">
+                                        <span class="price">${formartedPrice}</span>
+                                        <span class="badge bg-secondary mb-0">
+                                            ${pd.category}
+                                        </span>
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-primary w-100 mt-3 view-detail">
+                                        <i class="fas fa-info-circle me-1"></i> Xem chi tiet
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+            });
+
+            pdHtml += `</div>`;
+            container.innerHTML = pdHtml;
+        }
+
+        // viet ham thong bao khong co san pham nao de hien thi
+        function renderEmptyState(){
+            const container = document.getElementById("productContainer");
+            container.innerHTML = `
+                <div class="alert alert-warning text-center" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <p> Khong co san pham nao de hien thi</p>
+                </div>
+            `;
+        }
+
         // viet ham hien thi thong bao loi
         function renderError(message){
             const container = document.getElementById("productContainer");
@@ -115,6 +199,13 @@
                 </div>
             `;
         }
+
+        // goi chay chuong trinh
+        function init(){
+            fetchProducts();
+        }
+        // bat su kien khi trang web dc tai xong
+        document.addEventListener('DOMContentLoaded', init);
 
     </script>
     </body>
