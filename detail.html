@@ -60,12 +60,12 @@
             <!-- Header -->
             <div class="text-center mb-5">
                 <h1 class="display-5 fw-bold text-primary">
-                    <i class="fas fa-store me-2"></i>Chi tiet sản phẩm
+                    <i class="fas fa-store me-2"></i>Chi tiết sản phẩm
                 </h1>
                 <p class="lead">Dữ liệu được lấy từ API FakeStore</p>
                 <button class="btn btn-primary btn-sm"
-                    onclick="location.reload(true);">
-                    Lam moi du lieu
+                    onclick="window.history.back();">
+                    Quay lai trang chu
                 </button>
             </div>
 
@@ -88,7 +88,26 @@
             const queryString = window.location.search;
             const urlParams = new URLSearchParams(queryString);
             const idPd = urlParams.has('id') ? urlParams.get('id') : 0; // lay gia tri id tren URL
-            const API_URL = `https://fakestoreapi.com/products/${idPd}`;
+            const idNumber = Number(idPd); // ep ve so
+            const id = Number.isFinite(idNumber) ? idNumber : 0; // kiem tra ma san pham phai la so
+            const API_URL = `https://fakestoreapi.com/products/${id}`;
+
+            function showLoading(container){
+                container.innerHTML = `
+                    <div class="loading">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Đang tải...</span>
+                        </div>
+                        <span class="ms-3">Đang tải sản phẩm...</span>
+                    </div>
+                `;
+            }
+            async function fetchDetailProductById(){
+                const container = document.getElementById("productContainer");
+                // loading
+                showLoading(container);
+                
+            }
             
         </script>
     </body>
