@@ -92,6 +92,10 @@
             const id = Number.isFinite(idNumber) ? idNumber : 0; // kiem tra ma san pham phai la so
             const API_URL = `https://fakestoreapi.com/products/${id}`;
 
+            document.addEventListener("DOMContentLoaded", () => {
+                fetchDetailProductById();
+            });
+
             function showLoading(container){
                 container.innerHTML = `
                     <div class="loading">
@@ -106,7 +110,106 @@
                 const container = document.getElementById("productContainer");
                 // loading
                 showLoading(container);
-                
+                try {
+                    const response = await fetch(API_URL);
+                    if(!response.ok){
+                        throw new Error(`co loi xay ra : ${response.status} `);
+                    }
+                    const product = await response.json();
+                    if(!product || product.length === 0){
+                        // khong co san pham theo ma id
+                        renderProductEmpty();
+                    } else {
+                        // co ton tai san pham theo ma id
+                        renderProductDetail(product);
+                    }
+                    
+                } catch (error) {
+                    console.log("Loi khi goi API", error);
+                    // hien thi loi
+                    renderError("Khong the hien thi thong tin san pham !");
+                }
+            }
+            function renderProductDetail(product){
+                const container = document.getElementById("productContainer");
+                // xu ly hien thi don vi tien te theo usd
+                const formartedPrice = new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD'
+                }).format(product.price);
+                // hien thi thong tin
+                const detailHTML = `
+                <div class="product-card">
+                    <div class="row g-0">
+                        <div class="col-sm-12 col-md-6">
+                            <img src="${product.image}" class="product-image" alt="${product.title}" />
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="p-4 p-lg-5">
+                                <!-- danh muc -->
+                                <div class="mb-3">
+                                    <span class="category-badge">
+                                        <i class="fas fa-tag me-2"></i>
+                                        ${product.category}
+                                    </span>
+                                </div>
+                                <!-- Title / tieu de -->
+                                <h1 class="display-6 fw-bold mb-3">${product.title}</h1>
+                                <!-- Price / gia -->
+                                <div class="mb-3">
+                                    <span class="price">${formartedPrice}</span>
+                                </div>
+                                <!-- Mo ta san pham -->
+                                <div class="info-section">
+                                    <h5 class="fw-bold mb-3">
+                                        <i class="fas fa-align-left me-2 text-primary"></i>Mo ta san pham
+                                    </h5>
+                                    <p class="text-muted lead">${product.description}</p>
+                                </div>
+                                <!-- Thong tin  -->
+                                <div class="info-section">
+                                    <h5 class="fw-bold mb-3">
+                                        <i class="fas fa-info-cicrle me-2 text-primary"></i>Thong tin chi tiet
+                                    </h5>
+                                    <ul class="list-unstyled">
+                                        <li class="mb-2">
+                                            <i class="fas fa-chart-line me-2 text-primary"></i>
+                                            <strong>Danh gia Trung binh</strong>
+                                            ${product.rating.rate}
+                                        </li>
+                                        <li class="mb-2">
+                                            <i class="fas fa-users me-2 text-primary"></i>
+                                            <strong>Luot danh gia</strong>
+                                            ${product.rating.count}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+                container.innerHTML = detailHTML;
+            }
+            function renderProductEmpty(){
+                const container = document.getElementById("productContainer");
+                container.innerHTML = `
+                <div class="alert alert-warning text-center" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <p> San pham khong co trong he thong !</p>
+                </div>
+                `;
+            }
+
+            function renderError(message){
+                const container = document.getElementById("productContainer");
+                container.innerHTML = `
+                    <div class="error-message">
+                        <i class="fas fa-exclamation-cricle fa-3x mb-3"></i>
+                        <h3> Da xay ra loi !</h3>
+                        <p>${message}</p>
+                    </div>
+                `;
             }
             
         </script>
